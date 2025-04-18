@@ -339,7 +339,6 @@ SELECT
 FROM world_bank_data.wdi_country
 GROUP BY `Region`
 ORDER BY `Region`
-limit 7;
 """)
 
 ```
