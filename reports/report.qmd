@@ -336,7 +336,7 @@ SELECT
     SUM(CASE WHEN `Income Group` = 'Lower middle income' THEN 1 ELSE 0 END) AS lower_middle_income,
     SUM(CASE WHEN `Income Group` = 'Low income' THEN 1 ELSE 0 END) AS low_income,
     SUM(CASE WHEN `Income Group` IS NULL OR `Income Group` NOT IN ('High income', 'Upper middle income', 'Lower middle income', 'Low income') THEN 1 ELSE 0 END) AS other
-FROM world_bank_data.wdi_country
+FROM sp25_taylors_user.wdi_country
 GROUP BY `Region`
 ORDER BY `Region`;
 """)
@@ -414,21 +414,21 @@ order by `Short Name`;
 
 run_sql_and_return_html(cnx,"""
 SELECT 
-    r.`Region` AS region,
-    i.`Income Group` AS income_group,
-    COUNT(w.`Country Code`) AS num_countries
+    regions.region,
+    income_groups.income_group
 FROM 
-    (SELECT DISTINCT `Region` FROM sp25_taylors_user.wdi_country WHERE `Region` is not NULL) r
+    (SELECT DISTINCT `Region` AS region FROM sp25_taylors_user.wdi_country) AS regions
 CROSS JOIN 
-    (SELECT DISTINCT `Income Group` FROM sp25_taylors_user.wdi_country) i
-LEFT JOIN 
-    sp25_taylors_user.wdi_country w
-ON 
-    r.`Region` = w.`Region` AND i.`Income Group` = w.`Income Group`
-GROUP BY 
-    r.`Region`, i.`Income Group`
+    (SELECT DISTINCT `Income Group` AS income_group FROM sp25_taylors_user.wdi_country) AS income_groups
+WHERE 
+    NOT EXISTS (
+        SELECT 1
+        FROM sp25_taylors_user.wdi_country AS original
+        WHERE original.`Region` = regions.region
+          AND original.`Income Group` = income_groups.income_group
+    )
 ORDER BY 
-    r.`Region`, i.`Income Group`;
+    regions.region, income_groups.income_group;
 """)
 
 ```
