@@ -121,7 +121,9 @@ drop table if exists sp25_taylors_user.wdi_country;
 ```{python}
 # create table
 execute_ddl(cnx,"""
-create table sp25_taylors_user.wdi_country as select * from world_bank_data.wdi_country;
+create table sp25_taylors_user.wdi_country as 
+select * from world_bank_data.wdi_country
+where region is NOT NULL;
 """)
 ```
 
