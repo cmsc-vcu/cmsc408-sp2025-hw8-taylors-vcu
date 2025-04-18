@@ -2,10 +2,13 @@
 title: Homework 8 - World Bank Analysis
 ---
 
-GITHUB URL:  <https://github.com/cmsc-vcu/cmsc408-sp2025-hw8-jleonard99>
+GITHUB URL:  <https://github.com/cmsc-vcu/cmsc408-sp2025-hw8-taylors-vcu>
 
 
 # Problem Background
+The goal of this assignment is to pull data from the WDI database and find correlates of human development to reduce the poverty and promote economic development to countries that are in such development.
+
+
 
 
 ```{python}
@@ -91,7 +94,7 @@ List all non-countries.
 ## (skills: select, where)
 
 run_sql_and_return_html(cnx,"""
-select "doh!" as "Homer says ..." from dual
+select * from wdi_country where Region is NULL;
 """)
 ```
 
@@ -109,20 +112,21 @@ Create your own copy of WDI_Country containing just countries.
 
 # drop table
 execute_ddl(cnx,"""
-drop table if exists wdi_country;
+drop table if exists sp25_taylors_user.wdi_country;
 """)
 ```
 
 ```{python}
 # create table
 execute_ddl(cnx,"""
+create table sp25_taylors_user.wdi_country as select * from world_bank_data.wdi_country;
 """)
 ```
 
 ```{python}
 # show number of records
 run_sql_and_return_html(cnx,"""
-select "doh!" as "Homer says ..." from dual
+select COUNT(*) as Entries from sp25_taylors_user.wdi_country;
 """)
 ```
 
@@ -134,7 +138,9 @@ According to the World Bank, in 2020 there were how many countries in the world?
 ## (skills: select, aggregate)
 
 run_sql_and_return_html(cnx,"""
-select "doh!" as "Homer says ..." from dual
+select
+(select count(*) from sp25_taylors_user.wdi_country) - 
+(select count(*) from sp25_taylors_user.wdi_country where Region is NULL) as Countries;
 """)
 
 ```
@@ -151,7 +157,8 @@ What are all unique values of region in the wdi_country table?
 ## (skills: select, aggregate, order by)
 
 run_sql_and_return_html(cnx,"""
-select "doh!" as "Homer says ..." from dual
+select distinct `Region` from sp25_taylors_user.wdi_country where
+region is NOT NULL;
 """)
 
 ```
@@ -165,7 +172,11 @@ How many countries are in each region?
 ## (skills: select, aggregate, group by, order by)
 
 run_sql_and_return_html(cnx,"""
-select "doh!" as "Homer says ..." from dual
+select region , count(*) as `Number of Countries`
+from sp25_taylors_user.wdi_country
+where region is NOT NULL
+group by region
+order by `Number of Countries`;
 """)
 
 ```
@@ -179,7 +190,9 @@ List the country full names and regions for all countries in north america.
 ## (skills: select, where, order by)
 
 run_sql_and_return_html(cnx,"""
-select "doh!" as "Homer says ..." from dual
+select `Short Name` as `Country`
+from sp25_taylors_user.wdi_country
+where Region = "North America";
 """)
 
 ```
@@ -192,7 +205,9 @@ select "doh!" as "Homer says ..." from dual
 ## (skills: select, where)
 
 run_sql_and_return_html(cnx,"""
-select "doh!" as "Homer says ..." from dual
+select region, `Short Name`, `Long Name` 
+from sp25_taylors_user.wdi_country
+where `Short Name` = "Qatar";
 """)
 
 ```
@@ -206,7 +221,9 @@ select "doh!" as "Homer says ..." from dual
 ## (skills: select, where, order by)
 
 run_sql_and_return_html(cnx,"""
-select "doh!" as "Homer says ..." from dual
+select `Country Code`, `Short Name`,`2-alpha code`,`WB-2 code`,`Region`
+from sp25_taylors_user.wdi_country
+where `2-alpha code` != `WB-2 code`;
 """)
 
 ```
@@ -220,7 +237,7 @@ select "doh!" as "Homer says ..." from dual
 ## (skills: select, aggregate, group by, order by)
 
 run_sql_and_return_html(cnx,"""
-select "doh!" as "Homer says ..." from dual
+select `Income Group`, 
 """)
 
 ```
@@ -417,16 +434,16 @@ select "doh!" as "Homer says ..." from dual
 
 1. Reflect on the SQL skills you used throughout these exercises. Which skills do you feel most confident in, and which do you think need more practice? How has this assignment helped you build or reinforce specific SQL competencies?
 
-( response goes here)
+
 
 2. Problem-Solving Approach: Describe your approach to tackling the more complex tasks (like Tasks 18, 23, and 24). How did you break down these problems, and what steps did you take when you encountered challenges? How would you approach a similar problem differently in the future?
 
-( response goes here)
+
 
 
 3. Learning Takeaways: Consider the overall learning experience from this assignment. What were the biggest takeaways about working with SQL for data analysis and transformation? How do you think these skills will apply in real-world scenarios or future coursework?
 
-( response goes here)
+
 
 
 # README
@@ -441,4 +458,3 @@ focused on the root *README.md*.
 ::: {style="background:lightgray; margin-left:20px; border-top: 3px solid black; border-bottom: 3px solid black; padding-left:20px; padding-right:20px"}
 {{< include ../README.md >}}
 :::
-
