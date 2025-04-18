@@ -57,13 +57,13 @@ execute:
 ```
 
 ## Usage
-The final products within this repo are the deliverable documents that are generated in HTML from the `.qmd` (Quarto Markdown) files, however for this assignment we will focus on generating the Deliverable 6 Document report which is named `report.qmd`. 
+The final products within this repo are the deliverable documents that are generated in HTML from the `.qmd` (Quarto Markdown) files, however for this assignment we will focus on generating the Homework 8 Document report which is named `report.qmd`. 
 
 We will need the `quarto` command-line tool to render the following report to HTML so we can view it in our default browser. 
 
 Furthermore, the steps for downloading `quarto` can be found [here](https://quarto.org/docs/get-started/)
 
-We can generate the **Homework 7 Report** via the steps velow: 
+We can generate the **Homework 8 Report** via the steps velow: 
 
 1. Git clone this project via the following command:
 ```bash
