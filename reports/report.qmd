@@ -531,7 +531,47 @@ ORDER BY region;
 ## (This is much simpler than task 20!)
 
 run_sql_and_return_html(cnx,"""
-select base.income_group, sum(base.countries) as num_countries, income_totals.total_in_income as total_in_income, grand_totals.total_countries as total_countries, round((sum(base.countries) / grand_totals.total_countries) * 100, 1) as percent_of_total from ( select `Region` as region, `Income Group` as income_group, count(*) as countries from sp25_taylors_user.wdi_country group by region, `Income Group` ) as base left join ( select `Income Group` as income_group, count(*) as total_in_income from sp25_taylors_user.wdi_country group by `Income Group` ) as income_totals on base.income_group = income_totals.income_group cross join ( select count(*) as total_countries from sp25_taylors_user.wdi_country ) as grand_totals group by base.income_group, income_totals.total_in_income, grand_totals.total_countries order by base.income_group;
+SELECT 
+    base.income_group, 
+    income_totals.total_in_income AS total_in_income, 
+    grand_totals.total_countries AS total_countries, 
+    ROUND((SUM(base.countries) / grand_totals.total_countries) * 100, 1) AS percent_of_total
+FROM 
+    ( 
+        SELECT 
+            `Region` AS region, 
+            `Income Group` AS income_group, 
+            COUNT(*) AS countries 
+        FROM 
+            sp25_taylors_user.wdi_country 
+        GROUP BY 
+            region, `Income Group` 
+    ) AS base 
+LEFT JOIN 
+    ( 
+        SELECT 
+            `Income Group` AS income_group, 
+            COUNT(*) AS total_in_income 
+        FROM 
+            sp25_taylors_user.wdi_country 
+        GROUP BY 
+            `Income Group` 
+    ) AS income_totals 
+ON 
+    base.income_group = income_totals.income_group 
+CROSS JOIN 
+    ( 
+        SELECT 
+            COUNT(*) AS total_countries 
+        FROM 
+            sp25_taylors_user.wdi_country 
+    ) AS grand_totals 
+GROUP BY 
+    base.income_group, 
+    income_totals.total_in_income, 
+    grand_totals.total_countries 
+ORDER BY 
+    base.income_group;
 """)
 
 ```
