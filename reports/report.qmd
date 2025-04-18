@@ -258,7 +258,7 @@ group by `Income Group`;
 ## in the first column.
 
 run_sql_and_return_html(cnx,"""
-select `Country Code`,`Short Name`,Region
+select `Country Code`,`Short Name`,Region,`Income Group`
 from sp25_taylors_user.wdi_country
 where `Income Group` is NULL;
 """)
@@ -287,9 +287,9 @@ commit;
 ## Now, display the country again to verify the change stuck!
 
 run_sql_and_return_html(cnx,"""
-select `Country Code`,`Short Name`,Region
+select `Country Code`,`Short Name`,Region, `Income Group`
 from sp25_taylors_user.wdi_country
-where `Income Group` is NULL;
+where `Country Code` = "VEN";
 """)
 
 ```
