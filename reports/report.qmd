@@ -336,9 +336,10 @@ SELECT
     SUM(CASE WHEN `Income Group` = 'Lower middle income' THEN 1 ELSE 0 END) AS lower_middle_income,
     SUM(CASE WHEN `Income Group` = 'Low income' THEN 1 ELSE 0 END) AS low_income,
     SUM(CASE WHEN `Income Group` IS NULL OR `Income Group` NOT IN ('High income', 'Upper middle income', 'Lower middle income', 'Low income') THEN 1 ELSE 0 END) AS other
-FROM sp25_taylors_user.wdi_country
+FROM world_bank_data.wdi_country
 GROUP BY `Region`
-ORDER BY `Region`;
+ORDER BY `Region`
+limit 7;
 """)
 
 ```
